@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, jsonify, abort
+from flask import Flask, render_template, request, jsonify
 from ai_handler import *
 from ocr_handler import *
 

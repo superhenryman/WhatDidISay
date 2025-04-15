@@ -13,6 +13,6 @@ def return_image_string(image:bytes) -> str:
         return pytesseract.image_to_string(image=pil_image, lang="en")
     except Exception as e:
         print(f"Error {e}, possible solution: ")
-        print(generate_debug_response(e)) # Use Google Gemini to explain the fucking error
+        print(generate_debug_response(e))
         
 
