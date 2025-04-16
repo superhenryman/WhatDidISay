@@ -2,7 +2,7 @@ from PIL import Image
 import pytesseract
 import io
 from ai_handler import generate_debug_response
-
+#pytesseract.pytesseract.tesseract_cmd = r'C:\Users\PC\AppData\Local\Programs\Tesseract-OCR\tesseract.exe' uncomment on windows
 def return_image_string(image:bytes) -> str:
     """"
     DO NOT PLACE THE image parameter as a pillow image! This will fuck everything up!
