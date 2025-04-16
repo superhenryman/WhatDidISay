@@ -1,7 +1,7 @@
 import google.generativeai as genai
 import os
 from typing import Literal
-API_KEY = os.getenv("API_KEY")
+API_KEY = "AIzaSyDdkwFLZ4_jjzcaNuj2MvCnLFUxyVkkVZA"
 if not API_KEY:
     raise ValueError("API key for Google Generative AI is not set.")
 

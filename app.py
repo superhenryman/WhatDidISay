@@ -1,6 +1,9 @@
 from flask import Flask, render_template, request, jsonify
+from flask import jsonify
 from ai_handler import *
 from ocr_handler import *
+import base64
+import binascii
 
 app = Flask(__name__)
 
@@ -8,43 +11,63 @@ app = Flask(__name__)
 def home(): return render_template("index.html")
 
 @app.route("/what", methods=["POST"])
-def jack_black(): # i fucking love you jack black
-    # finally, main
-    data = request.get_json()
-    is_photo = data.get("is_photo")
-    mode = data.get("mode")
-    if is_photo:
-        # if it is photo, we have to process it with ocr_handler, then we have to use ai and send back a response
-        image = data.get("image")
-        if not image:
-            return jsonify({"response": "No image provided"}), 400
-        try:
-            image_string = return_image_string(image=image)
-            if not image_string:
-                return jsonify({"error": "No text found in the image"}), 400
-            # print(image_string) # debugging
-            response = generate_response(prompt=image_string, mode=mode)
-            return jsonify({"response": response}), 200
-        except Exception as e:
-            print(generate_debug_response(e))
-            print(f"Error: {e}")
-            return jsonify({"response": "An error occurred while processing the image"}), 500
-    elif not is_photo:
-        # easier job
-        text = data.get("text") 
-        if not text:
-            return jsonify({"response": "No text provided"}), 400
+def jack_black():
+    """Handle both text and image processing requests with validation"""
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({"error": "No data provided"}), 400
+
+        valid_modes = ["Serious", "Normal", "Sarcastic"]
+        mode = data.get("mode")
+        if mode not in valid_modes:
+            return jsonify({"error": f"Invalid mode. Valid options: {', '.join(valid_modes)}"}), 400
+
+        is_photo = data.get("is_photo", False)
         
-        try:
-            response = generate_response(prompt=text, mode=mode)
-            return jsonify({"response": response}), 200
-        except Exception as e:
-            print(generate_debug_response(e))
-            print(f"Error: {e}")
-            return jsonify({"response": "An error occurred while processing the text"}), 500
+        if is_photo:
+            return handle_image_request(data, mode)
+        return handle_text_request(data, mode)
         
-    else:
-        return jsonify({"response": "Invalid request"}), 400
+    except Exception as e:
+        error_msg = f"Unexpected error: {str(e)}"
+        debug_info = generate_debug_response(str(e))
+        print(f"Critical Error: {error_msg}\nDebug Info: {debug_info}")
+        return jsonify({"error": "Internal server error", "debug": debug_info}), 500
+
+
+def handle_image_request(data, mode):
+    """Process image-based requests"""
+    try:
+        image_b64 = data.get("image")
+        if not image_b64:
+            return jsonify({"error": "No image data provided"}), 400
+
+        try:
+            image_bytes = base64.b64decode(image_b64)
+        except (binascii.Error, ValueError) as e:
+            return jsonify({"error": "Invalid base64 encoding"}), 400
+
+        image_string = return_image_string(image_bytes)
+        if not image_string.strip():
+            return jsonify({"error": "No text found in image"}), 400
+
+        return generate_response(image_string, mode)
+        
+    except Exception as e:
+        debug_info = generate_debug_response(str(e))
+        return jsonify({"error": "Image processing failed", "debug": debug_info}), 400
+
+def handle_text_request(data, mode):
+    """Process text-based requests"""
+    text = data.get("text")
+    if not text or not text.strip():
+        return jsonify({"error": "No text provided"}), 400
+    
+    if len(text) > 10000:
+        return jsonify({"error": "Text exceeds 10,000 character limit"}), 400
+
+    return generate_response(text, mode)
 
 
 if __name__ == "__main__":

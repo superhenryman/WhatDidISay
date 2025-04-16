@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>What did I say?</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <h1>What did I say?</h1>
+    <p>
+      Upload a screenshot of your DMS (png/jpg) or a .txt file.<br />Choose a
+      mode and let our AI tell you what you said at that time.
+    </p>
+    <div class="upload-box">
+      <form id="FileUploadForm" enctype="multipart/form-data">
+        <input type="file" id="fileInput" name="file" accept=".txt, .png, .jpg" />
+        <select id="modeSelect" class="dropdown" name="mode" required>
+          <option value="Serious">Serious</option>
+          <option value="Normal">Normal</option>
+          <option value="Sarcastic">Sarcastic</option>
+        </select>
+        <button id="sendButton">Send</button>
+      </form>
+    </div>
+    <div id="response" class="response-box" style="display: none"></div>
+    <script src="/static/main.js"></script>
+  </body>
+</html>
