@@ -10,6 +10,7 @@ def return_image_string(image:bytes) -> str:
     """
     try:
         pil_image = Image.open(io.BytesIO(image))
+        print(pytesseract.get_languages(config=''))
         return pytesseract.image_to_string(image=pil_image, lang="en")
     except Exception as e:
         print(f"Error in return_image_string(){e}, possible solution: ")
