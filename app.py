@@ -52,7 +52,9 @@ def handle_image_request(data, mode):
         if not image_string.strip():
             return jsonify({"error": "No text found in image"}), 400
 
-        return generate_response(image_string, mode)
+        return jsonify({
+            "response": generate_response(image_string, mode)
+            }), 200
         
     except Exception as e:
         debug_info = generate_debug_response(str(e))
@@ -67,7 +69,9 @@ def handle_text_request(data, mode):
     if len(text) > 10000:
         return jsonify({"error": "Text exceeds 10,000 character limit"}), 400
 
-    return generate_response(text, mode)
+    return jsonify({
+        "response": generate_response(text, mode)
+        }), 200
 
 
 if __name__ == "__main__":
