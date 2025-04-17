@@ -1,13 +1,14 @@
 const form = document.getElementById("FileUploadForm");
 const fileInput = document.getElementById("fileInput");
 const modeSelect = document.getElementById("modeSelect");
+const responseDiv = document.getElementById("response");
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const file = fileInput.files[0];
   if (!file) {
-    alert("No file.");
+    alert("No file selected.");
     return;
   }
 
@@ -16,6 +17,10 @@ form.addEventListener("submit", async (e) => {
     is_photo: isPhoto,
     mode: modeSelect.value,
   };
+
+  responseDiv.classList.remove("visible");
+  responseDiv.style.display = "none";
+  responseDiv.innerHTML = "Processing...";
 
   try {
     if (isPhoto) {
@@ -28,7 +33,11 @@ form.addEventListener("submit", async (e) => {
     await sendData(formData);
   } catch (error) {
     console.error(error);
-    alert("An error occurred.");
+    responseDiv.innerHTML = `<strong>Error:</strong> Could not read file.`;
+    responseDiv.style.display = "block";
+    setTimeout(() => {
+      responseDiv.classList.add("visible");
+    }, 10);
   }
 });
 
@@ -54,9 +63,6 @@ async function sendData(formData) {
       body: JSON.stringify(formData),
     });
 
-    const responseDiv = document.getElementById("response");
-    responseDiv.style.display = "block";
-
     const data = await response.json();
 
     if (response.ok) {
@@ -68,6 +74,11 @@ async function sendData(formData) {
     }
   } catch (error) {
     console.error("Error:", error);
-    alert("An error occurred while processing your request.");
+    responseDiv.innerHTML = `<strong>Error:</strong> An error occurred while processing your request.`;
+  } finally {
+    responseDiv.style.display = "block";
+    setTimeout(() => {
+      responseDiv.classList.add("visible");
+    }, 10);
   }
 }
