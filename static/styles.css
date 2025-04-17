@@ -1,0 +1,142 @@
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  background-color: #f4f7f6;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem;
+  min-height: 100vh;
+  line-height: 1.6;
+  background: linear-gradient(135deg, #eef2f3 0%, #f4f7f6 100%);
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-15px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInUpScale {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+h1 {
+  color: #2c3e50;
+  margin-bottom: 0.5em;
+  animation: fadeInDown 0.8s ease-out forwards;
+}
+
+p {
+  color: #555;
+  text-align: center;
+  max-width: 600px;
+  margin-bottom: 2rem;
+  opacity: 0;
+  animation: fadeInDown 0.8s ease-out 0.2s forwards;
+}
+
+.upload-box {
+  background-color: #ffffff;
+  padding: 2rem 2.5rem;
+  border-radius: 10px;
+  box-shadow: 0 5px 20px rgba(0, 83, 156, 0.1);
+  margin-bottom: 2rem;
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+  opacity: 0;
+  animation: fadeInDown 0.8s ease-out 0.4s forwards;
+  transition: box-shadow 0.3s ease;
+}
+
+.upload-box:hover {
+  box-shadow: 0 8px 25px rgba(0, 83, 156, 0.15);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  align-items: center;
+}
+
+.form-control,
+.form-select {
+  border-radius: 6px;
+  border: 1px solid #ced4da;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.form-control:focus,
+.form-select:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.15);
+  outline: 0;
+}
+
+.form-control[type="file"] {
+  background-color: #f8f9fa;
+}
+.form-control[type="file"]:hover {
+  background-color: #e9ecef;
+}
+
+#sendButton.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+  color: white;
+  border-radius: 6px;
+  font-weight: bold;
+  letter-spacing: 0.5px;
+  padding: 0.8rem 1.2rem;
+  transition: background-color 0.3s ease, border-color 0.3s ease,
+    transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+#sendButton.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #0050a1;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+}
+
+#sendButton.btn-primary:active {
+  background-color: #004085;
+  border-color: #003770;
+  transform: translateY(0px);
+  box-shadow: 0 2px 5px rgba(0, 123, 255, 0.2);
+}
+
+.response-box {
+  background-color: #e7f3fe;
+  border: 1px solid #bce0fd;
+  color: #0c5460;
+  padding: 1.5rem 2rem;
+  border-radius: 8px;
+  margin-top: 2rem;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 4px 15px rgba(12, 84, 96, 0.1);
+  opacity: 0;
+  display: none;
+}
+
+.response-box.visible {
+  display: block;
+  animation: fadeInUpScale 0.6s ease-out forwards;
+}
